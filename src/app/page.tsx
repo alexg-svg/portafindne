@@ -1,65 +1,214 @@
-import Image from "next/image";
+import Link from "next/link";
+import { getFeaturedVendors, getAllVendors } from "@/lib/data";
+import VendorCard from "@/components/VendorCard";
 
-export default function Home() {
+const stateInfo = [
+  {
+    state: "CT",
+    name: "Connecticut",
+    emoji: "🏛️",
+    bg: "bg-blue-50 border-blue-200",
+    text: "text-blue-800",
+  },
+  {
+    state: "RI",
+    name: "Rhode Island",
+    emoji: "⚓",
+    bg: "bg-teal-50 border-teal-200",
+    text: "text-teal-800",
+  },
+  {
+    state: "MA",
+    name: "Massachusetts",
+    emoji: "🦞",
+    bg: "bg-red-50 border-red-200",
+    text: "text-red-800",
+  },
+];
+
+const serviceTypes = [
+  { name: "Standard", icon: "🚽" },
+  { name: "Deluxe", icon: "✨" },
+  { name: "ADA Accessible", icon: "♿" },
+  { name: "Luxury", icon: "👑" },
+  { name: "Construction & Long-term", icon: "🏗️" },
+];
+
+const steps = [
+  {
+    number: "1",
+    title: "Search",
+    description: "Enter your location or browse by state to find vendors near you.",
+  },
+  {
+    number: "2",
+    title: "Compare",
+    description: "Read reviews, compare pricing, and evaluate service offerings side by side.",
+  },
+  {
+    number: "3",
+    title: "Book",
+    description: "Contact your chosen vendor directly to get a quote and schedule delivery.",
+  },
+];
+
+export default function HomePage() {
+  const featuredVendors = getFeaturedVendors();
+  const allVendors = getAllVendors();
+  const ctCount = allVendors.filter((v) => v.state === "CT").length;
+  const riCount = allVendors.filter((v) => v.state === "RI").length;
+  const maCount = allVendors.filter((v) => v.state === "MA").length;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div>
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 text-white py-20 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight mb-4">
+            Find Porta Potties in New England
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-xl text-blue-200 mb-8 max-w-2xl mx-auto">
+            Compare vendors, read reviews, and get the best price in CT, RI &amp; MA.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+          {/* Search bar */}
+          <form
+            action="/vendors"
+            method="get"
+            className="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto mb-6"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+            <input
+              name="search"
+              type="text"
+              placeholder="Search by city or vendor name..."
+              className="flex-1 px-4 py-3 rounded-xl text-slate-900 text-base focus:outline-none focus:ring-2 focus:ring-blue-300"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <button
+              type="submit"
+              className="bg-amber-400 hover:bg-amber-500 text-blue-900 font-bold px-6 py-3 rounded-xl transition-colors whitespace-nowrap"
+            >
+              Search
+            </button>
+          </form>
+
+          <Link
+            href="/vendors"
+            className="inline-block bg-white text-blue-700 font-bold px-6 py-3 rounded-xl hover:bg-blue-50 transition-colors"
           >
-            Documentation
-          </a>
+            Browse All Vendors
+          </Link>
         </div>
-      </main>
+      </section>
+
+      {/* Stats bar */}
+      <section className="bg-blue-700 text-white py-4">
+        <div className="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+          {[
+            { value: "20+", label: "Vendors" },
+            { value: "3", label: "States" },
+            { value: "5", label: "Service Types" },
+            { value: "CT, RI & MA", label: "Serving" },
+          ].map((stat) => (
+            <div key={stat.label}>
+              <div className="text-2xl font-extrabold">{stat.value}</div>
+              <div className="text-blue-200 text-sm">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* State cards */}
+        <section className="py-12">
+          <h2 className="text-2xl font-bold text-slate-900 mb-6 text-center">
+            Browse by State
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {stateInfo.map((info) => {
+              const count =
+                info.state === "CT"
+                  ? ctCount
+                  : info.state === "RI"
+                  ? riCount
+                  : maCount;
+              return (
+                <Link
+                  key={info.state}
+                  href={`/vendors?state=${info.state}`}
+                  className={`block rounded-xl border-2 ${info.bg} p-6 text-center hover:shadow-md transition-shadow`}
+                >
+                  <div className="text-4xl mb-2">{info.emoji}</div>
+                  <div className={`text-xl font-bold ${info.text}`}>
+                    {info.name}
+                  </div>
+                  <div className="text-slate-600 text-sm mt-1">
+                    {count} vendors available
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Featured vendors */}
+        <section className="py-12 border-t border-slate-200">
+          <h2 className="text-2xl font-bold text-slate-900 mb-6 text-center">
+            Featured Vendors
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featuredVendors.map((vendor) => (
+              <VendorCard key={vendor.id} vendor={vendor} />
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            <Link
+              href="/vendors"
+              className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
+            >
+              View All Vendors
+            </Link>
+          </div>
+        </section>
+
+        {/* How it Works */}
+        <section className="py-12 border-t border-slate-200">
+          <h2 className="text-2xl font-bold text-slate-900 mb-8 text-center">
+            How It Works
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {steps.map((step) => (
+              <div key={step.number} className="text-center">
+                <div className="w-12 h-12 bg-blue-700 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">
+                  {step.number}
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 mb-2">
+                  {step.title}
+                </h3>
+                <p className="text-slate-600 text-sm">{step.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Service types */}
+        <section className="py-12 border-t border-slate-200">
+          <h2 className="text-2xl font-bold text-slate-900 mb-6 text-center">
+            Browse by Service Type
+          </h2>
+          <div className="flex flex-wrap justify-center gap-3">
+            {serviceTypes.map((svc) => (
+              <Link
+                key={svc.name}
+                href={`/vendors?service=${encodeURIComponent(svc.name)}`}
+                className="flex items-center gap-2 bg-white border border-slate-200 hover:border-blue-400 hover:bg-blue-50 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 hover:text-blue-700 transition-colors shadow-sm"
+              >
+                <span>{svc.icon}</span>
+                <span>{svc.name}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      </div>
     </div>
   );
 }
